@@ -1,0 +1,69 @@
+{
+  "project_info": {
+    "project_number": "735915327847",
+    "firebase_url": "https://driverapp-9f8f2-default-rtdb.firebaseio.com",
+    "project_id": "driverapp-9f8f2",
+    "storage_bucket": "driverapp-9f8f2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:735915327847:android:181de53e983d14b98defc2",
+        "android_client_info": {
+          "package_name": "com.Harikrishna.driverapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "735915327847-00imohl8m2etn3pf5ue5lsmrno95515q.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAOZv4-ql8p7hMN33h_pSGNu-Ie4A46W8c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "735915327847-00imohl8m2etn3pf5ue5lsmrno95515q.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:735915327847:android:a690a42068e10f308defc2",
+        "android_client_info": {
+          "package_name": "com.Harikrishna.usersapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "735915327847-00imohl8m2etn3pf5ue5lsmrno95515q.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAOZv4-ql8p7hMN33h_pSGNu-Ie4A46W8c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "735915327847-00imohl8m2etn3pf5ue5lsmrno95515q.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
