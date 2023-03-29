@@ -479,7 +479,6 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   searchNearestOnlineDrivers() async {
-    String bid_value = "";
     //no active driver available
     if (onlineNearByAvailableDriversList.length == 0) {
       //cancel/delete the RideRequest Information
@@ -512,75 +511,148 @@ class _MainScreenState extends State<MainScreen> {
                 referenceRideRequest: referenceRideRequest)));
 
     if (response == "driverChoosed") {
-      FirebaseDatabase.instance
-          .ref()
-          .child("drivers")
-          .child(chosenDriverId!)
-          .once()
-          .then((snap) {
-        if (snap.snapshot.value != null) {
-          //send notification to that specific driver
-          sendNotificationToDriverNow(chosenDriverId!);
-
-          //Response from a Driver
-          FirebaseDatabase.instance
-              .ref()
-              .child("drivers")
-              .child(chosenDriverId!)
-              .child("newRideStatus")
-              .onValue
-              .listen((eventSnapshot) async {
-            //Display Waiting Response UI from a Driver
-            showWaitingResponseFromDriverUI();
-            log(eventSnapshot.snapshot.value.toString() + "eee");
-            if (eventSnapshot.snapshot.value == "bargaining") {
-              try {
-                Fluttertoast.showToast(msg: "The driver wants to bargain... ");
-                log("chosen driver id " + chosenDriverId.toString());
-                final value = await FirebaseDatabase.instance
-                    .ref()
-                    .child("drivers")
-                    .child(chosenDriverId!)
-                    .get();
-                log("got response value " + (value.value as Map).toString());
-                bid_value = (value.value as Map)["bid"].toString();
-                log("Mess" + bid_value.toString());
-                bidglobe = int.parse(bid_value.toString());
-                log("Mess" + bidglobe.toString());
-                showDialog(
-                    context: context,
-                    builder: ((context) => bargainwithdriver(bidglobe)));
-              } catch (e) {
-                log("error occ " + e.toString());
-              }
-            }
-
-            //1. driver has cancel the rideRequest :: Push Notification
-            // (newRideStatus = idle
-            if (eventSnapshot.snapshot.value == "idle") {
-              Fluttertoast.showToast(
-                  msg:
-                      "The driver has cancelled your request. Please choose another driver.");
-
-              Future.delayed(const Duration(milliseconds: 3000), () {
-                Fluttertoast.showToast(msg: "Please Restart App Now.");
-
-                SystemNavigator.pop();
-              });
-            }
-
-            //2. driver has accept the rideRequest :: Push Notification
-            // (newRideStatus = accepted)
-            if (eventSnapshot.snapshot.value == "accepted") {
-              //design and display ui for displaying assigned driver information
-              showUIForAssignedDriverInfo();
-            }
-          });
-        } else {
-          Fluttertoast.showToast(msg: "This driver do not exist. Try Again");
-        }
-      });
+      mainer();
     }
+  }
+
+  mainer() async {
+    String bid_value = "";
+    await FirebaseDatabase.instance
+        .ref()
+        .child("drivers")
+        .child(chosenDriverId!)
+        .once()
+        .then((snap) {
+      if (snap.snapshot.value != null) {
+        //send notification to that specific driver
+        sendNotificationToDriverNow(chosenDriverId!);
+
+        //Response from a Driver
+        FirebaseDatabase.instance
+            .ref()
+            .child("drivers")
+            .child(chosenDriverId!)
+            .child("newRideStatus")
+            .onValue
+            .listen((eventSnapshot) async {
+          //Display Waiting Response UI from a Driver
+          showWaitingResponseFromDriverUI();
+          log(eventSnapshot.snapshot.value.toString() + "eee");
+          if (eventSnapshot.snapshot.value == "bargaining") {
+            try {
+              Fluttertoast.showToast(msg: "The driver wants to bargain... ");
+              log("chosen driver id " + chosenDriverId.toString());
+              final value = await FirebaseDatabase.instance
+                  .ref()
+                  .child("drivers")
+                  .child(chosenDriverId!)
+                  .get();
+              log("got response value " + (value.value as Map).toString());
+              bid_value = (value.value as Map)["bid"].toString();
+              log("Mess" + bid_value.toString());
+              bidglobe = int.parse(bid_value.toString());
+              log("Mess" + bidglobe.toString());
+              showDialog(
+                  context: context,
+                  builder: ((context) => bargainwithdriver(bidglobe)));
+            } catch (e) {
+              log("error occ " + e.toString());
+            }
+          }
+
+          //1. driver has cancel the rideRequest :: Push Notification
+          // (newRideStatus = idle
+          if (eventSnapshot.snapshot.value == "idle") {
+            Fluttertoast.showToast(
+                msg:
+                    "The driver has cancelled your request. Please choose another driver.");
+
+            Future.delayed(const Duration(milliseconds: 3000), () {
+              Fluttertoast.showToast(msg: "Please Restart App Now.");
+
+              SystemNavigator.pop();
+            });
+          }
+
+          //2. driver has accept the rideRequest :: Push Notification
+          // (newRideStatus = accepted)
+          if (eventSnapshot.snapshot.value == "accepted") {
+            //design and display ui for displaying assigned driver information
+            showUIForAssignedDriverInfo();
+          }
+        });
+      } else {
+        Fluttertoast.showToast(msg: "This driver do not exist. Try Again");
+      }
+    });
+  }
+
+  mainer2() async {
+    String bid_value = "";
+    await FirebaseDatabase.instance
+        .ref()
+        .child("drivers")
+        .child(chosenDriverId!)
+        .once()
+        .then((snap) {
+      if (snap.snapshot.value != null) {
+        FirebaseDatabase.instance
+            .ref()
+            .child("drivers")
+            .child(chosenDriverId!)
+            .child("newRideStatus")
+            .onValue
+            .listen((eventSnapshot) async {
+          //Display Waiting Response UI from a Driver
+          showWaitingResponseFromDriverUI();
+          log(eventSnapshot.snapshot.value.toString() + "eee");
+          if (eventSnapshot.snapshot.value == "bargaining") {
+            try {
+              Fluttertoast.showToast(msg: "The driver wants to bargain... ");
+              log("chosen driver id " + chosenDriverId.toString());
+              final value = await FirebaseDatabase.instance
+                  .ref()
+                  .child("drivers")
+                  .child(chosenDriverId!)
+                  .get();
+              log("got response value " + (value.value as Map).toString());
+              bid_value = (value.value as Map)["bid"].toString();
+              log("Mess" + bid_value.toString());
+              bidglobe = int.parse(bid_value.toString());
+              log("Mess" + bidglobe.toString());
+              showDialog(
+                  context: context,
+                  builder: ((context) => bargainwithdriver(bidglobe)));
+            } catch (e) {
+              log("error occ " + e.toString());
+            }
+          }
+
+          //1. driver has cancel the rideRequest :: Push Notification
+          // (newRideStatus = idle
+          if (eventSnapshot.snapshot.value == "idle") {
+            Fluttertoast.showToast(
+                msg:
+                    "The driver has cancelled your request. Please choose another driver.");
+
+            Future.delayed(const Duration(milliseconds: 3000), () {
+              Fluttertoast.showToast(msg: "Please Restart App Now.");
+
+              SystemNavigator.pop();
+            });
+          }
+
+          //2. driver has accept the rideRequest :: Push Notification
+          // (newRideStatus = accepted)
+          if (eventSnapshot.snapshot.value == "accepted") {
+            //design and display ui for displaying assigned driver information
+            showUIForAssignedDriverInfo();
+          }
+        });
+      } else {
+        Fluttertoast.showToast(msg: "This driver do not exist. Try Again");
+      }
+    });
   }
 
   Widget bargainwithdriver(int? S) {
@@ -655,7 +727,7 @@ class _MainScreenState extends State<MainScreen> {
                     fillColor: Colors.grey,
 
                     hintText: "Amount here",
-                    labelText: "Enter Your Amount",
+                    labelText: "To Bargain enter :",
                   )),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -715,8 +787,14 @@ class _MainScreenState extends State<MainScreen> {
                           .child(referenceRideRequest!.key.toString())
                           .child("bidStatus")
                           .set("accepted");
-
-                      showUIForAssignedDriverInfo();
+                      FirebaseDatabase.instance
+                          .ref()
+                          .child("All Ride Requests")
+                          .child(referenceRideRequest!.key.toString())
+                          .child("fare")
+                          .set(S);
+                      showWaitingResponseFromDriverUI();
+                      mainer2();
                     }),
                     child: Text('Accept'),
                     style: ElevatedButton.styleFrom(
@@ -748,12 +826,12 @@ class _MainScreenState extends State<MainScreen> {
   sendNotificationToDriverNow(String chosenDriverId) {
     //assign/SET rideRequestId to newRideStatus in
     // Drivers Parent node for that specific choosen driver
-    /*FirebaseDatabase.instance
+    FirebaseDatabase.instance
         .ref()
         .child("drivers")
         .child(chosenDriverId)
         .child("newRideStatus")
-        .set(referenceRideRequest!.key);*/
+        .set(referenceRideRequest!.key);
     setState(() {
       requestid = referenceRideRequest!.key;
     });
