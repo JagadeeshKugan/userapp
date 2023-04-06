@@ -334,6 +334,7 @@ class _MainScreenState extends State<MainScreen> {
           driverCarDetails =
               (eventSnap.snapshot.value as Map)["car_details"].toString();
         });
+        log(driverCarDetails + "car details");
       }
 
       if ((eventSnap.snapshot.value as Map)["driverPhone"] != null) {
@@ -341,6 +342,7 @@ class _MainScreenState extends State<MainScreen> {
           driverPhone =
               (eventSnap.snapshot.value as Map)["driverPhone"].toString();
         });
+        log(driverPhone + "car details");
       }
 
       if ((eventSnap.snapshot.value as Map)["driverName"] != null) {
@@ -348,6 +350,7 @@ class _MainScreenState extends State<MainScreen> {
           driverName =
               (eventSnap.snapshot.value as Map)["driverName"].toString();
         });
+        log(driverName + "car details");
       }
 
       if ((eventSnap.snapshot.value as Map)["status"] != null) {
@@ -365,10 +368,10 @@ class _MainScreenState extends State<MainScreen> {
 
         LatLng driverCurrentPositionLatLng =
             LatLng(driverCurrentPositionLat, driverCurrentPositionLng);
-
         //status = accepted
         if (userRideRequestStatus == "accepted") {
-          updateArrivalTimeToUserPickupLocation(driverCurrentPositionLatLng);
+          await updateArrivalTimeToUserPickupLocation(
+              driverCurrentPositionLatLng);
         }
 
         //status = arrived
@@ -380,10 +383,11 @@ class _MainScreenState extends State<MainScreen> {
 
         ////status = ontrip
         if (userRideRequestStatus == "ontrip") {
-          updateReachingTimeToUserDropOffLocation(driverCurrentPositionLatLng);
+          await updateReachingTimeToUserDropOffLocation(
+              driverCurrentPositionLatLng);
         }
 
-        {
+        if (userRideRequestStatus == "ended") {
           if ((eventSnap.snapshot.value as Map)["fare"] != null) {
             double fareAmount = double.parse(
                 (eventSnap.snapshot.value as Map)["fare"].toString());
@@ -515,6 +519,7 @@ class _MainScreenState extends State<MainScreen> {
     }
   }
 
+// choosed driver beginning
   mainer() async {
     String bid_value = "";
     await FirebaseDatabase.instance
@@ -587,6 +592,7 @@ class _MainScreenState extends State<MainScreen> {
     });
   }
 
+//bid
   mainer2() async {
     String bid_value = "";
     await FirebaseDatabase.instance
@@ -594,9 +600,9 @@ class _MainScreenState extends State<MainScreen> {
         .child("drivers")
         .child(chosenDriverId!)
         .once()
-        .then((snap) {
+        .then((snap) async {
       if (snap.snapshot.value != null) {
-        FirebaseDatabase.instance
+        await FirebaseDatabase.instance
             .ref()
             .child("drivers")
             .child(chosenDriverId!)
@@ -672,6 +678,11 @@ class _MainScreenState extends State<MainScreen> {
           ),
           child: Column(
             children: [
+              Text("Recommendation : " + userrec.toString(),
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 22,
+                      color: Colors.grey)),
               const SizedBox(
                 height: 10,
               ),
@@ -701,11 +712,7 @@ class _MainScreenState extends State<MainScreen> {
                     color: Colors.black,
                     fontWeight: FontWeight.w600,
                   ),
-                  onChanged: (value) {
-                    setState(() {
-                      bargain_amt.text = value;
-                    });
-                  },
+                  onChanged: (value) {},
                   keyboardType: TextInputType.number,
                   decoration: InputDecoration(
                     focusColor: Colors.white,
@@ -746,12 +753,7 @@ class _MainScreenState extends State<MainScreen> {
                           requestid! +
                           " BID" +
                           bidglobe.toString());
-                      FirebaseDatabase.instance
-                          .ref()
-                          .child("All Ride Requests")
-                          .child(requestid!)
-                          .child("bid")
-                          .set(bargain_amt.text);
+
                       FirebaseDatabase.instance
                           .ref()
                           .child("All Ride Requests")
@@ -762,7 +764,7 @@ class _MainScreenState extends State<MainScreen> {
                       print(S);
                       print(bidglobe);
                       log("message" + bargain_amt.text);
-
+                      Navigator.of(context).pop();
                       // sendNotificationToDriverNow(chosenDriverId!);
                     }),
                     child: Text('Bargain'),
@@ -795,6 +797,7 @@ class _MainScreenState extends State<MainScreen> {
                           .set(S);
                       showWaitingResponseFromDriverUI();
                       mainer2();
+                      Navigator.of(context).pop();
                     }),
                     child: Text('Accept'),
                     style: ElevatedButton.styleFrom(

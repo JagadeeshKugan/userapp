@@ -11,6 +11,7 @@ String? chosenDriverId = "";
 double? userfare = 0;
 String? requestid = "";
 int? bidglobe = 0;
+double userrec = 0;
 String cloudMessagingServerToken =
     "key=AAAAq1f4wWc:APA91bGPHNDmd_8qCscG8gQwf6uVi2t2bTEO9YT7te7bdG_JT0RxyzNy3RNKxhe4AFnqGXwjR9VVa-nk7BH2shFrUoKupF0j35roffNKQHgEa3V0uSJ9d1p-qgxvNJSzEdRx1WtJx0Ax";
 String userDropOffAddress = "";

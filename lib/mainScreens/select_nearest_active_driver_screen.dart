@@ -4,6 +4,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:intl/intl.dart';
 import 'package:smooth_star_rating_nsafe/smooth_star_rating.dart';
 import 'package:users_app/assistants/assistant_methods.dart';
 import 'package:users_app/global/global.dart';
@@ -50,7 +51,41 @@ class _SelectNearestActiveDriversScreenState
                 .toString();
       }
     }
+
+    setrecomm(fareAmount);
     return fareAmount;
+  }
+
+  setrecomm(String fareamt) {
+    //String tdata = DateFormat("HH:mm:ss").format(DateTime.now());
+    //print(tdata);
+    DateTime now = DateTime.now();
+    //int hour = now.hour;
+    //int minute = now.minute;
+    String b = DateFormat.H().format(now);
+    //print('$hour $minute');
+    int time = int.parse(b);
+    int peakstart = 8;
+    double farer = double.parse(fareamt);
+    int peakevestart = 18;
+
+    if (time > peakstart && time < peakstart + 2) {
+      //do calc
+      double t = farer * 0.10;
+      farer = farer + t;
+      userrec = farer;
+      //return farer;
+    }
+    if (time < peakevestart + 2 && time > peakevestart) {
+      // do cal
+      double t = farer * 0.15;
+      farer = farer + t;
+      userrec = farer;
+      //return farer;
+    } else {
+      userrec = farer;
+      //return farer;
+    }
   }
 
   @override
